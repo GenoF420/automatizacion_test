@@ -26,17 +26,14 @@ try:
     
     time.sleep(1)  # Esperar a que la página de login cargue completamente
     
-    # And: ingreso como usuario "fhlbkblgfaiapsoddc@hthlm.com" (10 minuteMail)
+    # And: ingreso con usuario vacío
     email_field = driver.find_element(By.XPATH, '//*[@id="user_email"]')
     email_field.clear()
-    email_field.send_keys("fhlbkblgfaiapsoddc@hthlm.com")
-    time.sleep(1)
 
-    # And: ingreso una clave incorrecta "clavenoesfalsa123"
+    # And: ingreso con clave vacía
     password_field = driver.find_element(By.XPATH, '//*[@id="user_password"]')
     password_field.clear()
-    password_field.send_keys("clavenoesfalsa123")
-    time.sleep(2)
+    time.sleep(1)
 
     # And: realizo el envío de los datos
     login_button = driver.find_element(By.XPATH, '/html/body/header/nav/div/div[2]/ul[2]/li[3]/div/div[2]/div/div/div[1]/div/div/div[1]/form/div[3]/input')
@@ -46,7 +43,11 @@ try:
     time.sleep(3)  # Esperar a que se complete la redirección
 
     # Verificar que la URL es la del dashboard
-    assert "https://www.recorrido.cl/es/users/dashboard" in driver.current_url, "La URL no es la esperada"
+    assert "https://www.recorrido.cl/users/sign_in?locale=es" in driver.current_url, "La URL no es la esperada"
+
+    # Y aparece un mensaje de error "Email o contraseña inválidos."
+    error_message = driver.find_element(By.XPATH, "//div[contains(text(), 'Email o contraseña inválidos.')]")
+    assert "Email o contraseña inválidos." in error_message.text, "El mensaje de error no es el esperado."
 
     print("Test completado exitosamente.")
 
