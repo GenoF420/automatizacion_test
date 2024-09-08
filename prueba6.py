@@ -22,7 +22,7 @@ try:
     # Ingresar un correo electrónico válido
     email_field = driver.find_element(By.XPATH, '//*[@id="new_user_email"]')
     email_field.clear()
-    email_field.send_keys("rekaw871556@amxyy.com")
+    email_field.send_keys("")
 
     # Ingresar una contraseña válida
     password_field = driver.find_element(By.XPATH, '//*[@id="new_user_password"]')
