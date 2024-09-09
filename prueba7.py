@@ -1,4 +1,4 @@
-#prueba 5 deelan "aun falta"
+#prueba 6
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -17,19 +17,19 @@ try:
     # Navegar a la página de registro
     login_link = driver.find_element(By.XPATH, '//*[@id="login-toggle"]')
     login_link.click()
-    time.sleep(3)  # Esperar a que la página de registro cargue completamente
+    time.sleep(3) 
 
     # Ingresar un correo electrónico válido
     email_field = driver.find_element(By.XPATH, '//*[@id="new_user_email"]')
     email_field.clear()
     email_field.send_keys("rekaw8716@amxyy.com")
 
-    # Ingresar una contraseña válida
+    # Ingresar una contraseña inválida
     password_field = driver.find_element(By.XPATH, '//*[@id="new_user_password"]')
     password_field.clear()
     password_field.send_keys("Clave12434")
 
-    # Confirmar la contraseña
+    # Confirmar la contraseña 
     confirm_password_field = driver.find_element(By.XPATH, '//*[@id="new_user_password_confirmation"]')
     confirm_password_field.clear()
     confirm_password_field.send_keys("Clave1234")
@@ -45,12 +45,10 @@ try:
     register_button = driver.find_element(By.XPATH, '//*[@id="signup"]/form/div[3]/input')
     register_button.click()
 
-    # Esperar a que se complete el proceso de registro
+   
     time.sleep(5)
-    print("Registro completado exitosamente. Revisa tu correo para activar la cuenta.")
-
-except Exception as e:
-    print(f"Ha ocurrido un error durante la ejecución: {e}")
+   
+    print("Contraseñas no coinciden")
 
 finally:
     # Cerrar el navegador

@@ -19,7 +19,7 @@ try:
     login_link.click()
     time.sleep(3)  # Esperar a que la página de registro cargue completamente
 
-    # Ingresar un correo electrónico válido
+    # no ingresar un correo electrónico 
     email_field = driver.find_element(By.XPATH, '//*[@id="new_user_email"]')
     email_field.clear()
     email_field.send_keys("")
@@ -29,7 +29,7 @@ try:
     password_field.clear()
     password_field.send_keys("Clave1234")
 
-    # Confirmar la contraseña
+    # Confirmar la contraseña valida
     confirm_password_field = driver.find_element(By.XPATH, '//*[@id="new_user_password_confirmation"]')
     confirm_password_field.clear()
     confirm_password_field.send_keys("Clave1234")
@@ -45,12 +45,8 @@ try:
     register_button = driver.find_element(By.XPATH, '//*[@id="signup"]/form/div[3]/input')
     register_button.click()
 
-    # Esperar a que se complete el proceso de registro
-    time.sleep(5)
-    print("Registro completado exitosamente. Revisa tu correo para activar la cuenta.")
-
-except Exception as e:
-    print(f"Ha ocurrido un error durante la ejecución: {e}")
+    print("Correo electrónico es requerido")
+    
 
 finally:
     # Cerrar el navegador
