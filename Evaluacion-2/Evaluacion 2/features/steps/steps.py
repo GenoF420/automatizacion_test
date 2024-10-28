@@ -68,6 +68,7 @@ def step_impl(context, email):
         )
         email_field.clear()
         email_field.send_keys(email)
+        
     except (TimeoutException, NoSuchElementException):
         context.driver.save_screenshot("error_ingresar_usuario.png")
         raise
@@ -79,6 +80,7 @@ def step_impl(context, password):
         password_field = context.driver.find_element(By.ID, "user_password")
         password_field.clear()
         password_field.send_keys(password)
+
     except NoSuchElementException:
         context.driver.save_screenshot("error_ingresar_clave.png")
         raise
@@ -87,6 +89,7 @@ def step_impl(context, password):
 def step_impl(context, password):
     logging.info(f"Ingresando la clave incorrecta: {password}")
     try:
+        
         password_field = context.driver.find_element(By.ID, "user_password")
         password_field.clear()
         password_field.send_keys(password)
@@ -97,7 +100,7 @@ def step_impl(context, password):
 @when('dejo el campo de usuario vacío')
 def step_impl(context):
     logging.info("Dejando el campo de usuario vacío")
-    try:
+    try:        
         email_field = context.driver.find_element(By.ID, "user_email")
         email_field.clear()
     except NoSuchElementException:
@@ -110,6 +113,8 @@ def step_impl(context):
     try:
         password_field = context.driver.find_element(By.ID, "user_password")
         password_field.clear()
+
+
     except NoSuchElementException:
         context.driver.save_screenshot("error_campo_clave_vacio.png")
         raise
@@ -344,16 +349,20 @@ def step_impl(context, fecha):
 
 @then('no se permite seleccionar un día anterior a hoy')
 def step_impl(context):
-    logging.info("Verificando que no se permite seleccionar un día anterior a hoy")
+    logging.info("Verificando que no se permite seleccionar un día anterior a hoy y cerrando sesión")
     try:
-        # Verificamos si aparece un mensaje de error
+        # Verificamos el mensaje de error
         mensaje_error = WebDriverWait(context.driver, 10).until(
             EC.visibility_of_element_located((By.XPATH, "//div[contains(text(), 'No puede seleccionar fecha menor a hoy')]"))
         )
         assert mensaje_error.is_displayed(), "El mensaje de error no se muestra"
+
+
+        logging.info("Mensaje verificado y sesión cerrada correctamente")
     except (TimeoutException, NoSuchElementException, AssertionError):
         context.driver.save_screenshot("error_fecha_anterior_hoy.png")
-        raise
+        raise AssertionError("Error al verificar el mensaje o cerrar la sesión")
+
 
 # -----------------------------
 # Pasos para Restablecimiento de Contraseñas
@@ -367,6 +376,10 @@ def step_impl(context):
             EC.element_to_be_clickable((By.ID, "login-toggle"))
         )
         login_toggle.click()
+        signin_tab = WebDriverWait(context.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "signin-tab"))
+        )
+        signin_tab.click()
     except (TimeoutException, NoSuchElementException):
         context.driver.save_screenshot("error_navegar_inicio_sesion.png")
         raise
@@ -376,7 +389,7 @@ def step_impl(context):
     logging.info('Seleccionando la opción de "¿Olvidaste tu contraseña?"')
     try:
         forgot_password_link = WebDriverWait(context.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "¿Olvidaste tu contraseña?"))
+            EC.element_to_be_clickable((By.LINK_TEXT, "Olvidé mi contraseña"))
         )
         forgot_password_link.click()
     except (TimeoutException, NoSuchElementException):
@@ -392,6 +405,10 @@ def step_impl(context, email):
         )
         email_field.clear()
         email_field.send_keys(email)
+        enviar = context.driver.find_element((By.XPATH, "/html/body/div[3]/div/div/div[2]/form/div[2]/input"))
+        enviar.click()
+        
+
     except (TimeoutException, NoSuchElementException):
         context.driver.save_screenshot("error_ingresar_correo_registrado.png")
         raise
@@ -405,6 +422,8 @@ def step_impl(context, email):
         )
         email_field.clear()
         email_field.send_keys(email)
+        enviar = context.driver.find_element((By.XPATH, "/html/body/div[3]/div/div/div[2]/form/div[2]/input"))
+        enviar.click()
     except (TimeoutException, NoSuchElementException):
         context.driver.save_screenshot("error_ingresar_correo_no_registrado.png")
         raise
@@ -462,6 +481,30 @@ def step_impl(context):
         assert login_toggle.is_displayed(), "El botón de login no está visible; la sesión podría no haberse cerrado correctamente"
     except (TimeoutException, NoSuchElementException, AssertionError):
         context.driver.save_screenshot("error_cerrar_sesion.png")
+        raise
+
+@when('cierro la sesión')
+def step_impl(context):
+    logging.info("Iniciando el proceso de cierre de sesión")
+    try:    
+                # Abrir el menú de usuario para acceder a "Salir"
+        login_togglee = WebDriverWait(context.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "login-toggle"))
+        )
+        login_togglee.click()
+
+        # Buscar y hacer clic en el enlace "Salir"
+        logout_link = WebDriverWait(context.driver, 10).until(
+             EC.element_to_be_clickable((By.LINK_TEXT, "Salir"))
+        )
+        logout_link.click()
+        WebDriverWait(context.driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "login-toggle"))
+        )
+        logging.info("Cierre de sesión completado exitosamente")
+    except (TimeoutException, NoSuchElementException) as e:
+        context.driver.save_screenshot("error_cerrar_sesion.png")
+        logging.error(f"Error al cerrar sesión: {e}")
         raise
 
 # -----------------------------

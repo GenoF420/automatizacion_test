@@ -15,3 +15,4 @@ Feature: Restablecimiento de Contraseñas
     And ingreso un correo electrónico no registrado "correo_no_registrado@dominio.com"
     And hago clic en el botón de "Enviar instrucciones"
     Then aparece un mensaje de error indicando que el correo no está registrado
+

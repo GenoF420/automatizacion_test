@@ -15,3 +15,4 @@ Feature: Búsqueda de Pasajes
     And presiono el campo de fecha de ida
     And escribo una fecha menor a hoy "30/08/2020"
     Then no se permite seleccionar un día anterior a hoy
+
